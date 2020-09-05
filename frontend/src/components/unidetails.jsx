@@ -75,7 +75,7 @@ function UnidetailsComponent() {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
                         <Nav.Link ><Button onClick={handleShow}>ADD</Button></Nav.Link>
-                        <Nav.Link href="#home"><Button>VIEW</Button></Nav.Link>
+                        <Nav.Link href="/view-details"><Button>VIEW</Button></Nav.Link>
 
                     </Nav>
 

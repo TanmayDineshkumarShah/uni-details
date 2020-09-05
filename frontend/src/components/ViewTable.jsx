@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
+
 import { forwardRef } from 'react';
-import Avatar from 'react-avatar';
+//import Avatar from 'react-avatar';
 import Grid from '@material-ui/core/Grid'
+
 
 import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
@@ -43,9 +44,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const api = axios.create({
-  baseURL: `https://reqres.in/api`
-})
+
 
 
 function validateEmail(email){
@@ -59,8 +58,8 @@ function ViewTablePage() {
     {title: "uid", field: "uid", },
     //{title: "Avatar", render: rowData => <Avatar maxInitials={1} size={40} round={true} name={rowData === undefined ? " " : rowData.first_name} />  },
     {title: "name", field: "uniname"},
-    {title: "reg_date", field: "reg_date"},
-    {title: "exp_date", field: "exp_date"},
+    {title: "reg_date", field: "registration_date"},
+    {title: "exp_date", field: "expiration_date"},
     {title: "img_url", field: "img_url"},
     {title: "stud", field: "no_of_students"},
     {title: "email", field: "email"},
@@ -75,9 +74,10 @@ function ViewTablePage() {
   const [errorMessages, setErrorMessages] = useState([])
 
   useEffect(() => { 
-    api.get("/users")
-        .then(res => {               
-            setData(res.data.data)
+    axios.get("/get-uni-details")
+        .then(res => {
+            console.log(res);               
+            setData(res.data)
          })
          .catch(error=>{
              console.log("Error")
@@ -98,7 +98,7 @@ function ViewTablePage() {
     }
 
     if(errorList.length < 1){
-      api.patch("/users/"+newData.id, newData)
+      axios.post("/modify-uni-details", newData)
       .then(res => {
         const dataUpdate = [...data];
         const index = oldData.tableData.id;
@@ -161,8 +161,8 @@ function ViewTablePage() {
 //   }
 
   const handleRowDelete = (oldData, resolve) => {
-    
-    api.delete("/users/"+oldData.id)
+    console.log(oldData);
+    axios.post("/delete-uni-details",oldData)
       .then(res => {
         const dataDelete = [...data];
         const index = oldData.tableData.id;
@@ -179,11 +179,11 @@ function ViewTablePage() {
 
 
   return (
-    <div className="App">
+    <container>
       
       <Grid container spacing={1}>
-          <Grid item xs={3}></Grid>
-          <Grid item xs={6}>
+          
+          <Grid item xs={12}>
           <div>
             {iserror && 
               <Alert severity="error">
@@ -194,21 +194,21 @@ function ViewTablePage() {
             }       
           </div>
             <MaterialTable
-              title="User data from remote source"
+              title="University Details Table"
               columns={columns}
               data={data}
               icons={tableIcons}
-              options={{actionsColumnIndex:-1}}
+              options={{actionsColumnIndex:-1,pageSize:3}}
               editable={{
                 onRowUpdate: (newData, oldData) =>
                   new Promise((resolve) => {
                       handleRowUpdate(newData, oldData, resolve);
                       
                   }),
-                onRowAdd: (newData) =>
-                  new Promise((resolve) => {
-                    handleRowAdd(newData, resolve)
-                  }),
+                // onRowAdd: (newData) =>
+                //   new Promise((resolve) => {
+                //     handleRowAdd(newData, resolve)
+                //   }),
                 onRowDelete: (oldData) =>
                   new Promise((resolve) => {
                     handleRowDelete(oldData, resolve)
@@ -216,9 +216,9 @@ function ViewTablePage() {
               }}
             />
           </Grid>
-          <Grid item xs={3}></Grid>
+          
         </Grid>
-    </div>
+    </container>
   );
 }
 

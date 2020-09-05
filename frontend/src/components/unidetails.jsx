@@ -1,25 +1,49 @@
 import React, { useState } from "react";
 import { Form, Row, Col, Modal, Card, Button, Container, Navbar, Nav, } from "react-bootstrap";
-
+import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.css";
-
+import { useHistory } from "react-router-dom";
 
 
 function UnidetailsComponent() {
+    const history = useHistory();
     const [show, setShow] = useState(false);
+
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [value,setValue]=useState("");
+    const [uniData,setUniData]=useState({});
+
+    function handleSubmit(event){
+        axios
+      .post('/insert-data',uniData)
+      .then((response)=>{
+        
+        if(response.data.code!==200){
+          console.log("error in api post")
+        }
+        else{
+          
+          history.push("/view-details");
+        }
+        //console.log(response.data.message);
+      });
+
+    
+
+   
+        event.preventDefault();
+    }
 
     
 
     function handleProceed(event) {
         
-        const uniData = {
+        const sampleUniData = {
             uniname: event.target.uniname.value,
             registration_date:event.target.reg_date.value,
-            expiration_data:event.target.exp_date.value,
+            expiration_date:event.target.exp_date.value,
             img_url: event.target.img_url.value,
             no_of_students:event.target.no_of_students.value,
             email: event.target.email.value,
@@ -27,10 +51,10 @@ function UnidetailsComponent() {
             contact_no:event.target.contact_no.value,
         }
 
+        setUniData(sampleUniData);
+        setValue(JSON.stringify(sampleUniData,undefined,4));
         
-        setValue(JSON.stringify(uniData,undefined,2));
-        console.log(uniData);
-
+        handleClose();
         event.preventDefault();
 
 
@@ -50,7 +74,7 @@ function UnidetailsComponent() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <Nav.Link href="#home"><Button onClick={handleShow}>ADD</Button></Nav.Link>
+                        <Nav.Link ><Button onClick={handleShow}>ADD</Button></Nav.Link>
                         <Nav.Link href="#home"><Button>VIEW</Button></Nav.Link>
 
                     </Nav>
@@ -67,14 +91,16 @@ function UnidetailsComponent() {
                     <p style={{ textAlign: "right" }}>Hello {localStorage.getItem('uid')}</p>
 
                     <Card.Body >
-                        <Form style={{ display: formDisplay }} >
+                        <Form style={{ display: formDisplay }} onSubmit={handleSubmit} >
                             <Form.Control as="textarea" rows="10" value={value}/>
 
+                            <br></br><br></br>
+
                             <Form.Group as={Row}>
-                            <Col sm={12}>
-                                <Button type="submit">Proceed</Button>
-                            </Col>
-                        </Form.Group>
+                                <Col sm={12}>
+                                    <Button size="lg" type="submit">SUBMIT</Button>
+                                </Col>
+                            </Form.Group>
 
 
                         </Form>

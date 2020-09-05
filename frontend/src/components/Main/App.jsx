@@ -2,6 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
 import LoginPage from '../login/login';
 import UniDetailsPage from '../unidetails';
+import ViewTable from '../ViewTable';
 
 function App(){
   return(
@@ -14,6 +15,10 @@ function App(){
 
        <Route path="/uni-details">
          <UniDetailsPage />
+       </Route>
+
+       <Route path="/view-details">
+         <ViewTable />
        </Route>
 
        

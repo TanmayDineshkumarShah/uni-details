@@ -111,7 +111,7 @@ function UnidetailsComponent() {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>Add University</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleProceed}>
@@ -128,7 +128,7 @@ function UnidetailsComponent() {
                                 Registration Date
                         </Form.Label>
                             <Col sm={10}>
-                                <Form.Control name="reg_date" type="date" placeholder="Email" />
+                                <Form.Control name="reg_date" type="date" placeholder="Registration Date" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="3">
@@ -136,7 +136,7 @@ function UnidetailsComponent() {
                                 Expiration Date
                         </Form.Label>
                             <Col sm={10}>
-                                <Form.Control name="exp_date" type="date" placeholder="Email" />
+                                <Form.Control name="exp_date" type="date" placeholder="Expiration Date" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="4">
@@ -144,7 +144,7 @@ function UnidetailsComponent() {
                                 Image Url
                         </Form.Label>
                             <Col sm={10}>
-                                <Form.Control name="img_url" type="text" placeholder="Email" />
+                                <Form.Control name="img_url" type="text" placeholder="Image URL" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="5">
@@ -152,7 +152,7 @@ function UnidetailsComponent() {
                                 Number of Students
                         </Form.Label>
                             <Col sm={10}>
-                                <Form.Control name="no_of_students" type="number" placeholder="Email" />
+                                <Form.Control name="no_of_students" type="number" placeholder="Number Of Students" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="6">
@@ -168,7 +168,7 @@ function UnidetailsComponent() {
                                 Web Url
                         </Form.Label>
                             <Col sm={10}>
-                                <Form.Control name="web_url" type="text" placeholder="Email" />
+                                <Form.Control name="web_url" type="text" placeholder="Web URL" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="8">
@@ -176,7 +176,7 @@ function UnidetailsComponent() {
                                 Contact Number
                         </Form.Label>
                             <Col sm={10}>
-                                <Form.Control name="contact_no" type="number" placeholder="Email" />
+                                <Form.Control name="contact_no" type="number" placeholder="Contact Number" />
                             </Col>
                         </Form.Group>
 

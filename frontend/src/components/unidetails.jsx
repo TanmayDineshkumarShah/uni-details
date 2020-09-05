@@ -12,48 +12,48 @@ function UnidetailsComponent() {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const [value,setValue]=useState("");
-    const [uniData,setUniData]=useState({});
+    const [value, setValue] = useState("");
+    const [uniData, setUniData] = useState({});
 
-    function handleSubmit(event){
+    function handleSubmit(event) {
         axios
-      .post('/insert-data',uniData)
-      .then((response)=>{
-        
-        if(response.data.code!==200){
-          console.log("error in api post")
-        }
-        else{
-          
-          history.push("/view-details");
-        }
-        //console.log(response.data.message);
-      });
+            .post('/insert-data', uniData)
+            .then((response) => {
 
-    
+                if (response.data.code !== 200) {
+                    console.log("error in api post")
+                }
+                else {
 
-   
+                    history.push("/view-details");
+                }
+                //console.log(response.data.message);
+            });
+
+
+
+
         event.preventDefault();
     }
 
-    
+
 
     function handleProceed(event) {
-        
+
         const sampleUniData = {
             uniname: event.target.uniname.value,
-            registration_date:event.target.reg_date.value,
-            expiration_date:event.target.exp_date.value,
+            registration_date: event.target.reg_date.value,
+            expiration_date: event.target.exp_date.value,
             img_url: event.target.img_url.value,
-            no_of_students:event.target.no_of_students.value,
+            no_of_students: event.target.no_of_students.value,
             email: event.target.email.value,
-            web_url:event.target.web_url.value,
-            contact_no:event.target.contact_no.value,
+            web_url: event.target.web_url.value,
+            contact_no: event.target.contact_no.value,
         }
 
         setUniData(sampleUniData);
-        setValue(JSON.stringify(sampleUniData,undefined,4));
-        
+        setValue(JSON.stringify(sampleUniData, undefined, 4));
+
         handleClose();
         event.preventDefault();
 
@@ -92,7 +92,7 @@ function UnidetailsComponent() {
 
                     <Card.Body >
                         <Form style={{ display: formDisplay }} onSubmit={handleSubmit} >
-                            <Form.Control as="textarea" rows="10" value={value}/>
+                            <Form.Control as="textarea" rows="10" value={value} />
 
                             <br></br><br></br>
 

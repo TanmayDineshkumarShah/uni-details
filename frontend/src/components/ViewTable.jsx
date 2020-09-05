@@ -47,7 +47,7 @@ const tableIcons = {
 
 
 
-function validateEmail(email){
+function validateEmail(email) {
   const re = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
   return re.test(String(email).toLowerCase());
 }
@@ -55,17 +55,17 @@ function validateEmail(email){
 function ViewTablePage() {
 
   var columns = [
-    {title: "uid", field: "uid", },
+    { title: "uid", field: "uid", },
     //{title: "Avatar", render: rowData => <Avatar maxInitials={1} size={40} round={true} name={rowData === undefined ? " " : rowData.first_name} />  },
-    {title: "name", field: "uniname"},
-    {title: "reg_date", field: "registration_date"},
-    {title: "exp_date", field: "expiration_date"},
-    {title: "img_url", field: "img_url"},
-    {title: "stud", field: "no_of_students"},
-    {title: "email", field: "email"},
-    {title: "web_url", field: "web_url"},
-    {title: "contact", field: "contact_no"}
-    
+    { title: "name", field: "uniname" },
+    { title: "reg_date", field: "registration_date" },
+    { title: "exp_date", field: "expiration_date" },
+    { title: "img_url", field: "img_url" },
+    { title: "stud", field: "no_of_students" },
+    { title: "email", field: "email" },
+    { title: "web_url", field: "web_url" },
+    { title: "contact", field: "contact_no" }
+
   ]
   const [data, setData] = useState([]); //table data
 
@@ -73,96 +73,96 @@ function ViewTablePage() {
   const [iserror, setIserror] = useState(false)
   const [errorMessages, setErrorMessages] = useState([])
 
-  useEffect(() => { 
+  useEffect(() => {
     axios.get("/get-uni-details")
-        .then(res => {
-            console.log(res);               
-            setData(res.data)
-         })
-         .catch(error=>{
-             console.log("Error")
-         })
+      .then(res => {
+        console.log(res);
+        setData(res.data)
+      })
+      .catch(error => {
+        console.log("Error")
+      })
   }, [])
 
   const handleRowUpdate = (newData, oldData, resolve) => {
     //validation
     let errorList = []
-    if(newData.first_name === ""){
+    if (newData.first_name === "") {
       errorList.push("Please enter first name")
     }
-    if(newData.last_name === ""){
+    if (newData.last_name === "") {
       errorList.push("Please enter last name")
     }
-    if(newData.email === "" || validateEmail(newData.email) === false){
+    if (newData.email === "" || validateEmail(newData.email) === false) {
       errorList.push("Please enter a valid email")
     }
 
-    if(errorList.length < 1){
+    if (errorList.length < 1) {
       axios.post("/modify-uni-details", newData)
-      .then(res => {
-        const dataUpdate = [...data];
-        const index = oldData.tableData.id;
-        dataUpdate[index] = newData;
-        setData([...dataUpdate]);
-        resolve()
-        setIserror(false)
-        setErrorMessages([])
-      })
-      .catch(error => {
-        setErrorMessages(["Update failed! Server error"])
-        setIserror(true)
-        resolve()
-        
-      })
-    }else{
+        .then(res => {
+          const dataUpdate = [...data];
+          const index = oldData.tableData.id;
+          dataUpdate[index] = newData;
+          setData([...dataUpdate]);
+          resolve()
+          setIserror(false)
+          setErrorMessages([])
+        })
+        .catch(error => {
+          setErrorMessages(["Update failed! Server error"])
+          setIserror(true)
+          resolve()
+
+        })
+    } else {
       setErrorMessages(errorList)
       setIserror(true)
       resolve()
 
     }
-    
+
   }
 
-//   const handleRowAdd = (newData, resolve) => {
-//     //validation
-//     let errorList = []
-//     if(newData.first_name === undefined){
-//       errorList.push("Please enter first name")
-//     }
-//     if(newData.last_name === undefined){
-//       errorList.push("Please enter last name")
-//     }
-//     if(newData.email === undefined || validateEmail(newData.email) === false){
-//       errorList.push("Please enter a valid email")
-//     }
+  //   const handleRowAdd = (newData, resolve) => {
+  //     //validation
+  //     let errorList = []
+  //     if(newData.first_name === undefined){
+  //       errorList.push("Please enter first name")
+  //     }
+  //     if(newData.last_name === undefined){
+  //       errorList.push("Please enter last name")
+  //     }
+  //     if(newData.email === undefined || validateEmail(newData.email) === false){
+  //       errorList.push("Please enter a valid email")
+  //     }
 
-//     if(errorList.length < 1){ //no error
-//       api.post("/users", newData)
-//       .then(res => {
-//         let dataToAdd = [...data];
-//         dataToAdd.push(newData);
-//         setData(dataToAdd);
-//         resolve()
-//         setErrorMessages([])
-//         setIserror(false)
-//       })
-//       .catch(error => {
-//         setErrorMessages(["Cannot add data. Server error!"])
-//         setIserror(true)
-//         resolve()
-//       })
-//     }else{
-//       setErrorMessages(errorList)
-//       setIserror(true)
-//       resolve()
-//     }
+  //     if(errorList.length < 1){ //no error
+  //       api.post("/users", newData)
+  //       .then(res => {
+  //         let dataToAdd = [...data];
+  //         dataToAdd.push(newData);
+  //         setData(dataToAdd);
+  //         resolve()
+  //         setErrorMessages([])
+  //         setIserror(false)
+  //       })
+  //       .catch(error => {
+  //         setErrorMessages(["Cannot add data. Server error!"])
+  //         setIserror(true)
+  //         resolve()
+  //       })
+  //     }else{
+  //       setErrorMessages(errorList)
+  //       setIserror(true)
+  //       resolve()
+  //     }
 
-    
-//   }
+
+  //   }
 
   const handleRowDelete = (oldData, resolve) => {
     console.log(oldData);
-    axios.post("/delete-uni-details",oldData)
+    axios.post("/delete-uni-details", oldData)
       .then(res => {
         const dataDelete = [...data];
         const index = oldData.tableData.id;
@@ -180,44 +180,44 @@ function ViewTablePage() {
 
   return (
     <container>
-      
+
       <Grid container spacing={1}>
-          
-          <Grid item xs={12}>
+
+        <Grid item xs={12}>
           <div>
-            {iserror && 
+            {iserror &&
               <Alert severity="error">
-                  {errorMessages.map((msg, i) => {
-                      return <div key={i}>{msg}</div>
-                  })}
+                {errorMessages.map((msg, i) => {
+                  return <div key={i}>{msg}</div>
+                })}
               </Alert>
-            }       
+            }
           </div>
-            <MaterialTable
-              title="University Details Table"
-              columns={columns}
-              data={data}
-              icons={tableIcons}
-              options={{actionsColumnIndex:-1,pageSize:3}}
-              editable={{
-                onRowUpdate: (newData, oldData) =>
-                  new Promise((resolve) => {
-                      handleRowUpdate(newData, oldData, resolve);
-                      
-                  }),
-                // onRowAdd: (newData) =>
-                //   new Promise((resolve) => {
-                //     handleRowAdd(newData, resolve)
-                //   }),
-                onRowDelete: (oldData) =>
-                  new Promise((resolve) => {
-                    handleRowDelete(oldData, resolve)
-                  }),
-              }}
-            />
-          </Grid>
-          
+          <MaterialTable
+            title="University Details Table"
+            columns={columns}
+            data={data}
+            icons={tableIcons}
+            options={{ actionsColumnIndex: -1, pageSize: 3 }}
+            editable={{
+              onRowUpdate: (newData, oldData) =>
+                new Promise((resolve) => {
+                  handleRowUpdate(newData, oldData, resolve);
+
+                }),
+              // onRowAdd: (newData) =>
+              //   new Promise((resolve) => {
+              //     handleRowAdd(newData, resolve)
+              //   }),
+              onRowDelete: (oldData) =>
+                new Promise((resolve) => {
+                  handleRowDelete(oldData, resolve)
+                }),
+            }}
+          />
         </Grid>
+
+      </Grid>
     </container>
   );
 }

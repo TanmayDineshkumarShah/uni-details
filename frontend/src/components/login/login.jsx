@@ -1,15 +1,23 @@
-import React from "react";
+import React, {useState} from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import axios from 'axios';
+import Modal from 'react-bootstrap/Modal';
 //import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useHistory } from "react-router-dom";
 function LoginComponent(){
+ 
+  const history = useHistory();
 
   
+  const [show, setShow] = useState(false);
 
-  
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [respData,setRespData]=useState({});
   
 
   function handleSubmit(event){
@@ -18,16 +26,22 @@ function LoginComponent(){
       uid:event.target.uid.value,
       pass:event.target.pass.value
     }
-
-    console.log(data);
+    
+    //console.log(data);
 
     axios
       .post('/login',data)
       .then((response)=>{
-        console.log("hi login success");
+        setRespData(response.data);
+        if(response.data.code!==200){
+          handleShow();
+        }
+        else{
+          localStorage.setItem('uid', data.uid);
+          history.push("/uni-details");
+        }
+        //console.log(response.data.message);
       });
-
-    //console.log(data);
 
     console.log("data posted");
 
@@ -36,6 +50,7 @@ function LoginComponent(){
   }
 
     return(
+      
       // <Button>TANMAY</Button>
       <Container className="p-3">
       <Form onSubmit={handleSubmit}>
@@ -68,13 +83,26 @@ function LoginComponent(){
       Submit
      </Button>
     </Form> 
+
+    <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Login Unsuccesful</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{respData.message}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          
+        </Modal.Footer>
+    </Modal>
       </Container>
+
+      
     
     
     );
 
-     
-    
 }
 
 

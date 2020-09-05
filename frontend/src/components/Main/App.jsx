@@ -1,17 +1,23 @@
 import React from 'react';
-
-import {
-  BrowserRouter as Router,Route,Switch} from 'react-router-dom';
+import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
 import LoginPage from '../login/login';
+import UniDetailsPage from '../unidetails';
 
 function App(){
   return(
     <Router>
       <Switch>
       
-      <Route path="/">
+      <Route exact path="/">
         <LoginPage/>
        </Route>
+
+       <Route path="/uni-details">
+         <UniDetailsPage />
+       </Route>
+
+       
+       {/* <Route exact path="/modify-uni" component={}></Route> */}
   
     </Switch>
     </Router>

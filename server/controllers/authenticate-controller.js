@@ -7,8 +7,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 module.exports.authenticate=function(req,res){
 
     console.log("data dumped to api");
+    //var cred=JSON.parse(req.body);
+    console.log(req.body);
     var uid=req.body.uid;
     var password=req.body.pass;
+    
 
     connection.query('SELECT * FROM User_id WHERE user_id=?',[uid],async function(error,results,fields){
             if(error){
@@ -18,8 +21,10 @@ module.exports.authenticate=function(req,res){
                 });
             }
             else{
+                console.log(results);
                 if(results.length>0){
                     //const comparision=await bcrypt.compare(pass,results[0].password);
+                    console.log(password+ " "+ results[0].password);
                     if(password===results[0].password){
                         res.json({
                             "code":200,
@@ -29,14 +34,14 @@ module.exports.authenticate=function(req,res){
                     else{
                         res.json({
                              "code":204,
-                             "message":"Email and password does not match"
+                             "message":"uid and password does not match"
                         })
                       }
                     }
                 else{
                   res.json({
                     "code":206,
-                    "message":"Email does not exist"
+                    "message":"uid does not exist"
                       });
                 }
             }

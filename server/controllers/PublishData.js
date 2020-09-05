@@ -11,6 +11,7 @@ module.exports = function (req, res) {
         if (err) { console.log(err) }
         else {
             console.log("All records sent");
+            
             res.send(result);
         }
 

@@ -1,19 +1,50 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Form, Row, Col, Modal, Card, Button, Container, Navbar, Nav, } from "react-bootstrap";
 import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.css";
-import { useHistory } from "react-router-dom";
+import { useHistory,Redirect } from "react-router-dom";
+import ViewTable from '../ViewTable';
 
 
 function UnidetailsComponent() {
     const history = useHistory();
     const [show, setShow] = useState(false);
 
+    const [auth, setAuth] = useState(false);
+    const [isTokenValidated, setIsTokenValidated] = useState(false);
+
+    useEffect(() => {
+        let token=localStorage.getItem("token");
+        if(token){
+            axios.get("/login-auth",{headers:{"Authorization": `Bearer ${token}`}})
+            .then((res)=> {
+                
+                return res.request.status;
+            })
+            .then((status)=>{
+                
+                if(status===200){
+                    setAuth(true);
+                }
+            })
+            .catch((err)=>{
+                setAuth(false);
+                localStorage.removeItem("token");
+            })
+            .then(()=>setIsTokenValidated(true));
+        }
+        else{
+            setIsTokenValidated(true);
+        }
+        
+      }, [])
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [value, setValue] = useState("");
     const [uniData, setUniData] = useState({});
+
+
 
     function handleSubmit(event) {
         axios
@@ -24,6 +55,8 @@ function UnidetailsComponent() {
                     console.log("error in api post")
                 }
                 else {
+
+                    
 
                     history.push("/view-details");
                 }
@@ -65,9 +98,16 @@ function UnidetailsComponent() {
 
     function LogoutClicked() {
         localStorage.removeItem('uid');
+        localStorage.removeItem('token');
     }
 
-    return (
+    if(!isTokenValidated) return <div></div>;
+
+    console.log(auth);
+
+    return auth ? (
+
+        
         <Container>
             <Navbar bg="light" expand="lg">
 
@@ -199,7 +239,7 @@ function UnidetailsComponent() {
                 </Modal.Footer>
             </Modal>
         </Container>
-    );
+    ) : <Redirect to="/login" />
 
 
 }

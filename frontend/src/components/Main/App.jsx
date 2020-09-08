@@ -10,7 +10,11 @@ function App(){
       <Switch>
       
       <Route exact path="/">
-        <LoginPage/>
+        <UniDetailsPage />
+       </Route>
+
+       <Route path="/login">
+         <LoginPage />
        </Route>
 
        <Route path="/uni-details">
@@ -24,7 +28,7 @@ function App(){
        
        {/* <Route exact path="/modify-uni" component={}></Route> */}
   
-    </Switch>
+      </Switch>
     </Router>
      
     

@@ -1,6 +1,7 @@
 var connection=require('./../config');
 var bodyParser=require('body-parser');
 var express = require('express');
+var jwt=require('jsonwebtoken');
 var app=express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,11 +25,16 @@ module.exports.authenticate=function(req,res){
                 console.log(results);
                 if(results.length>0){
                     //const comparision=await bcrypt.compare(pass,results[0].password);
-                    console.log(password+ " "+ results[0].password);
+                    //console.log(password+ " "+ results[0].password);
                     if(password===results[0].password){
+                        var token=jwt.sign({id:uid},'secret123',{
+                            expiresIn:3600//1 hr
+                        });
+                        //console.log(token);
                         res.json({
                             "code":200,
-                            "message":"login successful"
+                            "message":"login successful",
+                            "token":token
                         });
                     }
                     else{

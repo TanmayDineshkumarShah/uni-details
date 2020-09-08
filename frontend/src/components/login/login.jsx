@@ -38,12 +38,14 @@ function LoginComponent() {
         }
         else {
           localStorage.setItem('uid', data.uid);
+          // console.log("token is ",response.data.token);
+          localStorage.setItem('token',response.data.token);
           history.push("/uni-details");
         }
         //console.log(response.data.message);
       });
 
-    console.log("data posted");
+    //console.log("data posted");
 
 
     event.preventDefault();

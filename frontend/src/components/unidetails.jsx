@@ -3,7 +3,7 @@ import { Form, Row, Col, Modal, Card, Button, Container, Navbar, Nav, } from "re
 import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.css";
 import { useHistory,Redirect } from "react-router-dom";
-import ViewTable from '../ViewTable';
+//import ViewTable from '../ViewTable';
 
 
 function UnidetailsComponent() {

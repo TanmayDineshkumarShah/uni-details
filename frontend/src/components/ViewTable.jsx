@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 
 import { forwardRef } from 'react';
 //import Avatar from 'react-avatar';
@@ -23,6 +24,7 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import axios from 'axios'
 import Alert from '@material-ui/lab/Alert';
+import { Redirect } from 'react-router';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -72,16 +74,45 @@ function ViewTablePage() {
   //for error handling
   const [iserror, setIserror] = useState(false)
   const [errorMessages, setErrorMessages] = useState([])
+  const [auth, setAuth] = useState(false);
+  const [isTokenValidated, setIsTokenValidated] = useState(false);
 
   useEffect(() => {
-    axios.get("/get-uni-details")
-      .then(res => {
-        console.log(res);
-        setData(res.data)
-      })
-      .catch(error => {
-        console.log("Error")
-      })
+
+    let token=localStorage.getItem("token");
+        if(token){
+            axios.get("/login-auth",{headers:{"Authorization": `Bearer ${token}`}})
+            .then((res)=> {
+                
+                return res.request.status;
+            })
+            .then((status)=>{
+                
+                if(status===200){
+                    setAuth(true);
+                }
+            })
+            .catch((err)=>{
+                setAuth(false);
+                localStorage.removeItem("token");
+            })
+            .then(()=>setIsTokenValidated(true));
+
+            axios.get("/get-uni-details")
+            .then(res => {
+              console.log(res);
+              setData(res.data)
+            })
+            .catch(error => {
+              console.log("Error")
+            })
+
+
+        }
+        else{
+            setIsTokenValidated(true);
+        }
+    
   }, [])
 
   const handleRowUpdate = (newData, oldData, resolve) => {
@@ -177,8 +208,9 @@ function ViewTablePage() {
       })
   }
 
+  if(!isTokenValidated) return <div></div>;
 
-  return (
+  return auth ? (
     <container>
 
       <Grid container spacing={1}>
@@ -219,7 +251,7 @@ function ViewTablePage() {
 
       </Grid>
     </container>
-  );
+  ):<Redirect to="/login" ></Redirect>
 }
 
 export default ViewTablePage;
